@@ -26,7 +26,7 @@
         <thead class="bg-slate-100 text-gray-700 sticky top-0 z-10">
             <tr>
                 <th class="px-6 py-3 font-semibold whitespace-nowrap">Nama Unit</th>
-                <th class="px-6 py-3 font-semibold whitespace-nowrap">Nama PIC</th>
+                <th class="px-6 py-3 font-semibold whitespace-nowrap">Nama PIC Mitra</th>
                 <th class="px-6 py-3 font-semibold whitespace-nowrap">Email</th>
                 <th class="px-6 py-3 font-semibold whitespace-nowrap">Status Surat</th>
                 <th class="px-6 py-3 font-semibold whitespace-nowrap">Status Dokumen</th>
@@ -37,7 +37,7 @@
             <?php foreach ($pengajuan as $item): ?>
                 <tr class="hover:bg-gray-50 transition">
                     <td class="px-6 py-4"><?= esc($item['nama_instansi_mitra']); ?></td>
-                    <td class="px-6 py-4"><?= esc($item['email_pengguna_jawab']); ?></td>
+                    <td class="px-6 py-4"><?= esc($item['email_pic_mitra']); ?></td>
                     <td class="px-6 py-4"><?= esc($item['no_telp_mitra']); ?></td>
                     <td class="px-6 py-4">
                         <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full 

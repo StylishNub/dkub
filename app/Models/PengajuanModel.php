@@ -9,8 +9,9 @@ class PengajuanModel extends Model
     protected $table = 'pengajuan_kerjasama';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'email_pengguna_jawab',
         'nama_instansi_mitra',
+        'nama_pic_mitra',
+        'email_pic_mitra',
         'no_telp_mitra',
         'bidang_kerjasama',
         'surat_permohonan',
@@ -19,7 +20,7 @@ class PengajuanModel extends Model
         'status_dokumen',
         'rencana_kegiatan',
         'deskripsi_kegiatan',
-        'waktu_pelaksanaan_tgl',
+        'durasi',
         'kategori_kegiatan',
         'alasan_ditolak',
         'user_id'  // Menambahkan kolom user_id

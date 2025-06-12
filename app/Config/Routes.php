@@ -27,7 +27,7 @@ $routes->get('/pks', 'User::pks');
 $routes->get('/evaluasi', 'User::evaluasi');
 $routes->get('/sop', 'User::sop');
 $routes->get('/pertor', 'User::pertor');
-$routes->get('/detail_artikel/(:segment)','User::detail_artikel/$1');
+// $routes->get('/detail_artikel/(:segment)','User::detail_artikel/$1');
 
 $routes->get('/login', 'Auth::login');
 $routes->post('/auth/cek_login', 'Auth::cek_login');
@@ -123,7 +123,6 @@ $routes->get('/kelola_pengaduan/balas/(:segment)', 'Admin::balas/$1');
 $routes->post('/kelola_pengaduan/balas/(:segment)', 'Admin::balas/$1');
 
 //Penjaduan Section
-// Route to view and manage pengajuan
 // Route untuk halaman kelola pengajuan
 $routes->get('/kelola_pengajuan', 'Admin::kelola_pengajuan');
 
@@ -153,6 +152,8 @@ $routes->get('/berita/detail_berita/(:num)', 'User::detail_berita/$1');
 
 //Section User
 $routes->get('/kelola_user', 'Admin::kelola_user');
+$routes->get('/kelola_user/tambah_user', 'Admin::tambah_user');
+$routes->post('/tambah_user/save_user', 'Admin::save_user');
 $routes->get('/kelola_user/approve/(:num)', 'Admin::approve_user/$1');
 $routes->get('/kelola_user/reject/(:num)', 'Admin::reject_user/$1');
 
@@ -161,5 +162,6 @@ $routes->get('/dinas', 'User::dinas');
 $routes->get('/view_pengajuan', 'UserLogin::view_pengajuan');
 $routes->get('/view_pengajuan/tambah_kerjasama', 'UserLogin::tambah_kerjasama');
 $routes->post('tambah_kerjasama/save_pengajuan', 'UserLogin::save_pengajuan');
+$routes->get('/view_pengajuan/lihat_detailPengajuan/(:segment)', 'UserLogin::lihat_detailPengajuan/$1');
 
 $routes->get('/view_pengajuan/delete_pengajuanUser/(:segment)', 'UserLogin::delete_pengajuanUser/$1');

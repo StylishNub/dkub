@@ -95,8 +95,101 @@ class Admin extends BaseAdminController
     
         return view('admin/user/user', $data);
     }
+    public function tambah_user()
+    {
+        $userModel = $this->UserModel->findAll();
+        $data = [
+            'title' => 'Tambah User',
+            'menu' => 'kelola_user',
+            'user' => $userModel,
+            'validation' => \config\Services::validation()
+
+        ];
+        return view('admin/user/addUser', $data);
+    }
+    public function save_user()
+    {
+        if ($this->validate([
+            'name' => [
+                'label' => 'Nama',
+                'rules' => 'required',
+                'errors' => ['required' => '{field} wajib diisi!']
+            ],
+            'email' => [
+                'label' => 'Email',
+                'rules' => 'required|valid_email',
+                'errors' => [
+                    'required' => '{field} wajib diisi!',
+                    'valid_email' => '{field} tidak valid!'
+                ]
+            ],
+            'fakultas_unit' => [
+                'label' => 'Fakultas / Unit',
+                'rules' => 'required',
+                'errors' => ['required' => '{field} wajib diisi!']
+            ]
+        ])) {
+            $email = $this->request->getPost('email');
     
+            // Cek duplikat email
+            if ($this->UserModel->where('email', $email)->first()) {
+                session()->setFlashdata('warning', 'Email sudah digunakan.');
+                return redirect()->back()->withInput();
+            }
     
+            // Generate random password (8 karakter acak)
+            $plainPassword = bin2hex(random_bytes(4));
+    
+            // Simpan user ke database
+            $this->UserModel->save([
+                'name' => $this->request->getPost('name'),
+                'email' => $email,
+                'instansi' => 'Universitas Brawijaya',
+                'kepentingan' => 'Sebagai Operator',
+                'fakultas_unit' => $this->request->getPost('fakultas_unit'),
+                'status' => 'approved', // 
+                'level' => 'user',
+                'keterangan' => 'fakultas dan unit kerja',
+                'password' => $plainPassword
+            ]);
+    
+            // Kirim email notifikasi akun
+            $emailService = \Config\Services::email();
+            $config = new \Config\Email();
+            $emailService->initialize($config);
+    
+            $emailService->setFrom($config->fromEmail, $config->fromName);
+            $emailService->setTo($email);
+            $emailService->setSubject('Akun Anda Telah Ditambahkan oleh Admin');
+    
+            $message = "
+                <p>Halo <strong>{$this->request->getPost('name')}</strong>,</p>
+                <p>Akun Anda telah <strong style='color:green;'>disetujui</strong> oleh Admin.</p>
+                <p>Berikut informasi login Anda:</p>
+                <ul>
+                    <li><strong>Email:</strong> {$email}</li>
+                    <li><strong>Password:</strong> {$plainPassword}</li>
+                </ul>
+                <p>Silakan login dan segera ubah password Anda setelah masuk.</p>
+                <br><p>Terima kasih.</p>
+            ";
+    
+            $emailService->setMessage($message);
+    
+            if (!$emailService->send()) {
+                log_message('error', 'Gagal kirim email ke user baru: ' . print_r($emailService->printDebugger(['headers']), true));
+                session()->setFlashdata('error', 'User ditambahkan, tapi email gagal dikirim.');
+            } else {
+                session()->setFlashdata('success', 'User berhasil ditambahkan dan email dikirim.');
+            }
+    
+            return redirect()->to('/kelola_user');
+    
+        } else {
+            session()->setFlashdata('errors', \Config\Services::validation()->getErrors());
+            return redirect()->back()->withInput();
+        }
+    }    
 
     public function approve_user($id)
     {
@@ -2071,6 +2164,11 @@ public function kelola_pengaduan()
             return $this->response->setJSON(['status' => 'error', 'message' => 'Pengajuan tidak ditemukan']);
         }
     
+        // Ambil data user untuk menentukan email tujuan
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find($pengajuan['user_id']);
+        $emailTujuan = ($user && $user['keterangan'] === 'fakultas dan unit kerja') ? $user['email'] : $pengajuan['email_pic_mitra'];
+    
         // ======== SURAT ========
         if ($type === 'surat') {
             if ($action === 'approve') {
@@ -2093,7 +2191,7 @@ public function kelola_pengaduan()
                 $config = new \Config\Email();
     
                 $email->setFrom($config->fromEmail, $config->fromName);
-                $email->setTo($pengajuan['email_pengguna_jawab']);
+                $email->setTo($emailTujuan);
                 $email->setSubject('Penolakan Surat Pengajuan Kerjasama');
                 $email->setMessage("
                     <p>Yth. <strong>{$pengajuan['nama_instansi_mitra']}</strong>,</p>
@@ -2124,7 +2222,7 @@ public function kelola_pengaduan()
                 $config = new \Config\Email();
     
                 $email->setFrom($config->fromEmail, $config->fromName);
-                $email->setTo($pengajuan['email_pengguna_jawab']);
+                $email->setTo($emailTujuan);
                 $email->setSubject('Penolakan Dokumen Pengajuan Kerjasama');
                 $email->setMessage("
                     <p>Yth. <strong>{$pengajuan['nama_instansi_mitra']}</strong>,</p>
@@ -2155,7 +2253,7 @@ public function kelola_pengaduan()
                         $config = new \Config\Email();
     
                         $email->setFrom($config->fromEmail, $config->fromName);
-                        $email->setTo($pengajuan['email_pengguna_jawab']);
+                        $email->setTo($emailTujuan);
                         $email->setSubject('Dokumen Pengajuan Kerjasama Telah Selesai');
                         $email->setMessage("
                             <p>Yth. <strong>{$pengajuan['nama_instansi_mitra']}</strong>,</p>
@@ -2186,20 +2284,31 @@ public function kelola_pengaduan()
         // Mengambil pengajuan berdasarkan ID
         $pengajuan = $this->pengajuanModel->find($id);
     
-        // Jika pengajuan tidak ditemukan, tampilkan halaman error atau redirect
+        // Jika pengajuan tidak ditemukan
         if (!$pengajuan) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Pengajuan dengan ID $id tidak ditemukan.");
         }
     
-        // Mengirimkan data ke view
+        // Ambil data user berdasarkan user_id
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find($pengajuan['user_id']);
+    
+        // Gabungkan data user ke pengajuan
+        if ($user) {
+            $pengajuan['name'] = $user['name'];
+            $pengajuan['email'] = $user['email'];
+            $pengajuan['keterangan'] = $user['keterangan'];
+        }
+    
         $data = [
             'title' => 'Detail Pengajuan',
             'menu' => 'kelola_pengajuan',
-            'pengajuan' => $pengajuan,  // Mengirimkan satu pengajuan berdasarkan ID
+            'pengajuan' => $pengajuan,
         ];
     
         return view('admin/pengajuan/detailPengajuan', $data);
     }
+    
 
     public function delete_hero($id = false)
     {

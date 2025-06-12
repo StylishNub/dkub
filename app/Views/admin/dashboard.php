@@ -34,7 +34,6 @@
             <thead class="bg-slate-100 text-gray-700 sticky top-0 z-10">
                 <tr>
                     <th class="px-4 py-2">Instansi</th>
-                    <th class="px-4 py-2">PIC</th>
                     <th class="px-4 py-2">Status Surat</th>
                     <th class="px-4 py-2">Status Dokumen</th>
                 </tr>
@@ -43,7 +42,6 @@
                 <?php foreach ($pengajuan as $p): ?>
                     <tr>
                         <td class="px-4 py-2"><?= esc($p['nama_instansi_mitra']) ?></td>
-                        <td class="px-4 py-2"><?= esc($p['email_pengguna_jawab']) ?></td>
 
                         <!-- Status Surat -->
                         <td class="px-4 py-2">

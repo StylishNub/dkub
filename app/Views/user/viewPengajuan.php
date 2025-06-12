@@ -43,7 +43,7 @@
         <?php foreach ($pengajuan as $item): ?>
             <tr class="hover:bg-gray-50 transition">
                 <td class="px-6 py-4 whitespace-nowrap max-w-[180px] truncate"><?= esc($item['nama_instansi_mitra']) ?></td>
-                <td class="px-6 py-4 whitespace-nowrap"><?= esc($item['email_pengguna_jawab']) ?></td>
+                <td class="px-6 py-4 whitespace-nowrap"><?= esc($item['email_pic_mitra']) ?></td>
                 <td class="px-6 py-4 whitespace-nowrap"><?= esc($item['no_telp_mitra']) ?></td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2 py-1 text-xs font-semibold <?= strtolower($item['status_surat']) === 'disetujui' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?> rounded-full">
@@ -54,6 +54,9 @@
                     <span class="px-2 py-1 text-xs font-semibold <?= strtolower($item['status_dokumen']) === 'selesai' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' ?> rounded-full">
                         <?= esc($item['status_dokumen']) ?>
                     </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <a href="/view_pengajuan/lihat_detailPengajuan/<?= $item['id'] ?>" class="text-green-400 hover:underline text-sm font-medium">Lihat</a>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <a href="/view_pengajuan/delete_pengajuanUser/<?= $item['id'] ?>" class="text-red-600 hover:underline text-sm font-medium" onclick="return confirm('Yakin ingin menghapus data pengajuan ini?');">Delete</a>

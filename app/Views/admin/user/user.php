@@ -4,8 +4,15 @@
 <h1 class="text-2xl font-bold mt-10 mb-6 text-gray-800">👤 Manajemen User</h1>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white max-h-[500px] border border-gray-200">
+    
     <!-- Search -->
     <div class="flex justify-between items-center px-4 py-3 bg-gray-100 border-b">
+        <a href="/kelola_user/tambah_user" class="inline-flex gap-2 items-center bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-md">
+                    <span>Tambah User</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                </a>  
         <form action="/kelola_user" method="GET" class="flex items-center w-full max-w-sm ml-auto">
             <input type="text" name="keyword" class="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Cari user..." value="<?= isset($_GET['keyword']) ? esc($_GET['keyword']) : '' ?>">
             <button type="submit" class="ml-2 p-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">

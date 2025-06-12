@@ -73,6 +73,7 @@ class Auth extends BaseController
                 'kepentingan' => $this->request->getPost('kepentingan'),
                 'status' => 'pending',
                 'level' => 'user',
+                'keterangan' => 'mitra',
             ];
     
             $this->Model_Auth->save_register($data);
