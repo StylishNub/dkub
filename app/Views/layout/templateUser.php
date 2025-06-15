@@ -145,10 +145,10 @@
         <div class="lg:col-span-3">
             <h4 class="font-semibold mb-3">QUICK LINK</h4>
             <ul class="space-y-1">
-                <li><a href="#" class="hover:underline font-bold">Temporary Trading Zone</a><br><span class="text-xs">(Identifikasi Peluang Kerja Sama)</span></li>
-                <li><a href="#" class="hover:underline font-bold">Penilaian Potensi Mitra</a></li>
-                <li><a href="#" class="hover:underline font-bold">Survey Kepuasan Pengguna</a></li>
-                <li><a href="#" class="hover:underline font-bold">Feedback</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe0GTSglUm3rwQFNpzPtSLeiNm10heP3fkZXGC7eWvbn4PZqA/viewform?usp=send_form" class="hover:underline font-bold">Temporary Trading Zone</a><br><span class="text-xs">(Identifikasi Peluang Kerja Sama)</span></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSf9dv2Db5OlaPZwQcvjVczjNJ-7rvaZjBwt9deGPfGJ0ZIi6A/viewform" class="hover:underline font-bold">Penilaian Potensi Mitra</a></li>
+                <li><a href="https://ikm.ub.ac.id//survei/?data=eyJpZF91bml0IjoiODgyIiwidW5pdF9ha3RpZiI6IkRpcmVrdG9yYXQgS2VyamEgU2FtYSJ9" class="hover:underline font-bold">Survey Kepuasan Pengguna</a></li>
+                <li><a href="#https://ub-care.ub.ac.id/" class="hover:underline font-bold">Feedback</a></li>
             </ul>
         </div>
 

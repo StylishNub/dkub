@@ -52,23 +52,41 @@ class Admin extends BaseAdminController
     public function index(): string
     {
         $userPending = $this->UserModel->where('status', 'pending')->findAll();
+    
         $pengajuanBelumDisetujui = $this->pengajuanModel
             ->where('status_surat !=', 'Disetujui')
             ->groupStart()
             ->where('status_dokumen !=', 'Selesai')
             ->where('status_dokumen !=', 'Ditolak')
-             ->groupEnd()
+            ->groupEnd()
             ->findAll();
     
+        // Statistik
+        $countMouAktif        = $this->kerjasamaModel->where('status', 'aktif')->countAllResults();
+        $countMouTidakAktif   = $this->kerjasamaModel->where('status', 'tidak aktif')->countAllResults();
+        $countSelesai         = $this->pengajuanModel->where('status_dokumen', 'Selesai')->countAllResults();
+        $countMenunggu        = $this->pengajuanModel->where('status_surat', 'Menunggu')->countAllResults();
+        $countDitolak         = $this->pengajuanModel->where('status_dokumen', 'Ditolak')->countAllResults();
+        $countSuratSetuju     = $this->pengajuanModel->where('status_surat', 'Disetujui')->countAllResults();
+        $countSuratTolak      = $this->pengajuanModel->where('status_surat', 'Ditolak')->countAllResults();
+    
         $data = [
-            'title' => 'Dashboard',
-            'menu' => 'dashboard',
-            'user' => $userPending,
-            'pengajuan' => $pengajuanBelumDisetujui
+            'title'              => 'Dashboard',
+            'menu'               => 'dashboard',
+            'user'               => $userPending,
+            'pengajuan'          => $pengajuanBelumDisetujui,
+            'countMouAktif'      => $countMouAktif,
+            'countMouTidakAktif' => $countMouTidakAktif,
+            'countSelesai'       => $countSelesai,
+            'countMenunggu'      => $countMenunggu,
+            'countDitolak'       => $countDitolak,
+            'countSuratSetuju'   => $countSuratSetuju,
+            'countSuratTolak'    => $countSuratTolak,
         ];
     
         return view('admin/dashboard', $data);
     }
+    
 
     public function kelola_user()
     {
